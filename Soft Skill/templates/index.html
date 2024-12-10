@@ -1,0 +1,1350 @@
+<html>
+<!-- ====================================================================== -->
+<!-- Desenvolvido por Levi Lucena - linkedin.com/in/levilucena -->
+<!-- ====================================================================== -->
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Soft Skills Analyzer - Análise Comportamental</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3e;
+            --light-color: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light-color), #fff);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .progress-indicator {
+            max-width: 1200px;
+            margin: 0 auto 20px;
+            padding: 0 20px;
+            display: none;
+        }
+
+        .progress-indicator .progress-bar {
+            height: 8px;
+            background: var(--light-color);
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .progress-indicator .progress-fill {
+            height: 100%;
+            background: var(--secondary-color);
+            border-radius: 4px;
+            width: 20%;
+            transition: width 0.3s ease;
+        }
+
+        .question-counter {
+            text-align: right;
+            color: var(--primary-color);
+            font-size: 0.9em;
+        }
+
+        .assessment-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .assessment-container:not(#identificationForm) {
+            display: none;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .question.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .option {
+            padding: 15px;
+            background-color: var(--light-color);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .option.selected {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--primary-color);
+        }
+
+        #results {
+            display: none;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .chart-container h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .skill-bar {
+            margin: 15px 0;
+        }
+
+        .skill-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: var(--light-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--secondary-color);
+            transition: width 1s ease;
+        }
+
+        .recommendations {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .export-buttons button {
+            margin: 0 10px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .navigation-buttons button {
+            flex: 1;
+        }
+
+        #prevBtn {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-groupname {
+            margin-bottom: 20px;
+            padding-top: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        select.form-input {
+            background-color: white;
+        }
+
+        .start-button {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        #identificationForm {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .signature {
+            position: fixed;
+            /* Fixa o rodapé na parte inferior */
+            bottom: 10px;
+            /* Distância da parte inferior */
+            width: 100%;
+            /* Para garantir que cubra toda a largura da página */
+            text-align: center;
+            /* Centraliza o texto */
+            font-family: 'Courier New', Courier, monospace;
+            /* Estilo de fonte tipo "assinatura" */
+            font-size: 10px;
+            /* Tamanho da fonte */
+            color: #555;
+            /* Cor suave para parecer uma assinatura */
+        }
+
+        .signature p {
+            margin: 0;
+            /* Remove as margens padrão */
+            padding: 0;
+        }
+
+        @media print {
+            .progress-indicator {
+                display: none !important;
+            }
+
+            #skillBars {
+                display: block !important;
+                margin: 20px auto;
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            #skillBars .skill-bar {
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
+
+            #skillBars .skill-name {
+                font-weight: bold;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            #skillBars .progress-bar {
+                height: 20px;
+                background-color: #ecf0f1 !important;
+                border: 1px solid #bdc3c7;
+                border-radius: 10px;
+                overflow: hidden;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            #skillBars .progress {
+                height: 100%;
+                background-color: #3498db !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .chart-container {
+                display: block !important;
+                page-break-inside: avoid;
+                margin-bottom: 30px;
+                border: 1px solid #ddd;
+            }
+
+            /* Oculta o título durante a impressão */
+            header h1 {
+                display: none !important;
+            }
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                zoom: 0.85;
+                /* Reduz a escala geral do conteúdo */
+            }
+
+            .container {
+                margin: 0;
+                padding: 5px;
+            }
+
+            #results {
+                display: block;
+                margin: 0 auto;
+                padding: 5px;
+                max-width: 800px;
+            }
+
+            .chart-container {
+                margin: 0 auto;
+                padding: 5px;
+                page-break-inside: avoid;
+                /* Evita quebra entre gráficos */
+            }
+
+            .chart-container canvas {
+                max-height: 400px;
+                /* Reduz o tamanho do gráfico */
+                margin: 0 auto;
+            }
+
+            .recommendations {
+                margin-top: 10px;
+                padding: 5px;
+                font-size: 0.8em;
+                /* Reduz tamanho do texto */
+                page-break-inside: avoid;
+                /* Evita quebra de recomendações */
+            }
+
+            .skill-bar {
+                margin: 5px 0;
+            }
+
+            .skill-name {
+                font-size: 0.9em;
+            }
+
+            .progress-bar {
+                height: 10px;
+                /* Reduz a altura das barras de progresso */
+            }
+
+            .user-info p {
+                font-size: 0.9em;
+                /* Reduz o tamanho do texto */
+                margin: 5px 0;
+            }
+
+            h2,
+            h3 {
+                font-size: 1.1em;
+                /* Reduz o tamanho dos títulos */
+                margin: 10px 0;
+            }
+
+            header {
+                display: none;
+                /* Oculta o cabeçalho na impressão */
+            }
+
+            .progress-indicator {
+                display: none !important;
+                /* Oculta barra de progresso */
+            }
+
+            .export-buttons {
+                display: none !important;
+                /* Oculta os botões de exportação e impressão */
+            }
+
+            /* Impedir quebras de página desnecessárias */
+            #results,
+            .chart-container,
+            .recommendations {
+                page-break-inside: avoid;
+            }
+
+            /* Prevenção para página em branco */
+            @page {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header
+        style="background: linear-gradient(135deg, var(--secondary-color), var(--primary-color)); color: white; padding: 30px 20px; text-align: center; border-radius: 0 0 15px 15px;">
+        <div class="container">
+            <h1
+                style="font-size: 2.5em; font-weight: bold; margin-bottom: 10px; line-height: 1.2; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <i class="fas fa-brain" style="font-size: 0.9em;"></i>
+                Soft Skills Analyzer
+            </h1>
+            <p style="font-size: 1.1em; margin-top: 5px; color: #f1f1f1;">
+                Explore suas habilidades e aprimore seu potencial para o sucesso!
+            </p>
+        </div>
+    </header>
+
+
+    <div class="container">
+        <div class="assessment-container" id="identificationForm">
+            <h2>Identificação do Participante</h2>
+            <br>
+            <div class="form-group">
+                <label for="userName">Nome Completo:</label>
+                <input type="text" id="userName" required class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="userEmail">Email:</label>
+                <input type="email" id="userEmail" required class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="roleCategory">Categoria:</label>
+                <select id="roleCategory" class="form-input" onchange="updateRoles()">
+                    <option value="">Selecione uma categoria</option>
+                    <option value="businessPartners">Business Partners</option>
+                    <option value="gestores">Gestores</option>
+                    <option value="diretores">Diretores</option>
+                    <option value="analistas">Analistas</option>
+                    <option value="assistentes">Assistentes</option>
+                    <option value="auxiliares">Auxiliares</option>
+                    <option value="estagiarios">Estagiários</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="specificRole">Cargo:</label>
+                <select id="specificRole" class="form-input" disabled>
+                    <option value="">Selecione um cargo</option>
+                </select>
+            </div>
+            <button onclick="startAssessment()" class="start-button">Iniciar Avaliação</button>
+        </div>
+    </div>
+
+    <div class="progress-indicator">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div class="question-counter">
+            Questão <span id="currentQuestionNumber"></span> de <span id="totalQuestions"></span>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="assessment-container">
+            <div id="questionnaire">
+                <!-- Questões serão inseridas aqui via JavaScript -->
+            </div>
+            <div class="navigation-buttons">
+                <button id="prevBtn" onclick="prevQuestion()">Anterior</button>
+                <button id="nextBtn" onclick="nextQuestion()">Próxima</button>
+            </div>
+        </div>
+
+        <div id="results">
+            <!-- Informações do usuário -->
+            <div class="user-info"></div>
+            <h2>Relatório de Soft Skills</h2>
+
+            <div class="chart-container">
+                <h3>Visão Geral das Competências</h3>
+                <canvas id="radarChart"></canvas>
+            </div>
+
+            <div id="skillBars" class="chart-container">
+                <h3>Detalhamento das Competências</h3>
+            </div>
+
+            <div class="recommendations">
+                <h3>Recomendações de Desenvolvimento</h3>
+                <div id="recommendationsList"></div>
+            </div>
+
+            <div class="export-buttons" style="margin-top: 20px; text-align: center;">
+                <button onclick="exportToPDF()">Exportar como PDF</button>
+                <!-- <button onclick="exportToCSV()">Exportar como CSV</button> -->
+                <button onclick="window.print()">Imprimir</button>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="location.reload()"
+                    style="background-color: var(--accent-color); color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 1em; cursor: pointer;">
+                    Refazer o Teste
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>function exportToPDF() {
+            const { jsPDF } = window.jspdf; // Usando jsPDF da biblioteca
+            const doc = new jsPDF();
+
+            // Adicionar título
+            doc.setFontSize(16);
+            doc.setTextColor(40);
+            doc.text("Relatório de Soft Skills", 105, 20, { align: "center" });
+
+            // Adicionar informações do usuário
+            const userInfo = JSON.parse(localStorage.getItem('userInfo')) || {};
+            doc.setFontSize(12);
+            doc.text(`Nome: ${userInfo.name || ''}`, 10, 30);
+            doc.text(`Cargo: ${userInfo.role || ''}`, 10, 40);
+
+            // Adicionar Gráfico de Radar
+            const radarCanvas = document.getElementById('radarChart');
+            if (radarCanvas) {
+                const radarDataURL = radarCanvas.toDataURL("image/png");
+                doc.addImage(radarDataURL, 'PNG', 10, 50, 190, 100);
+            }
+
+            // Adicionar Detalhamento das Competências
+            let yOffset = 160;
+            const skillBars = document.querySelectorAll('.skill-bar');
+            if (skillBars.length) {
+                doc.setFontSize(14);
+                doc.text("Detalhamento das Competências:", 10, yOffset);
+                yOffset += 10;
+
+                skillBars.forEach(bar => {
+                    const skillName = bar.querySelector('.skill-name').textContent;
+                    const skillValue = bar.querySelector('.skill-value').textContent.trim();
+                    doc.setFontSize(12);
+                    doc.text(`${skillName}: ${skillValue}`, 10, yOffset);
+                    yOffset += 10;
+                });
+            }
+
+            // Adicionar Recomendações
+            const recommendations = document.getElementById('recommendationsList').querySelectorAll('p');
+            if (recommendations.length) {
+                yOffset += 10;
+                doc.setFontSize(14);
+                doc.text("Recomendações de Desenvolvimento:", 10, yOffset);
+                yOffset += 10;
+
+                recommendations.forEach(recommendation => {
+                    const text = recommendation.textContent;
+                    doc.setFontSize(12);
+                    doc.text(doc.splitTextToSize(text, 180), 10, yOffset);
+                    yOffset += 10;
+                });
+            }
+
+            // Salvar PDF
+            doc.save("relatorio-soft-skills.pdf");
+        }
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const roleCategories = {
+
+            businessPartners: [
+                "Business Partner",
+            ],
+
+            gestores: [
+                "Gerente TI",
+                "Coordenador Administrativo",
+                "Supervisor Faturamento"
+            ],
+            diretores: [
+                "Arquiteto Soluções",
+                "Engenheiro Segurança Trabalho"
+            ],
+            analistas: [
+                "Analista Suporte Vip",
+                "Analista Administrativo",
+                "Analista Fiscal",
+                "Analista Governança TI",
+                "Analista de Sistemas", // Novo cargo
+            ],
+            assistentes: [
+                "Assistente Administração Pessoal",
+                "Assistente Faturamento"
+            ],
+            auxiliares: [
+                "Auxiliar Administrativo",
+                "Massoterapeuta"
+            ],
+            estagiarios: [
+                "Estagiário",
+                "Trainee",
+                "Jovem Aprendiz"
+            ],
+            outros: [
+                "Recruiter",
+                "Especialista Benefícios",
+                "Especialista Remuneração",
+                "Comprador",
+                "Técnico Segurança Trabalho",
+                "Advogado"
+            ]
+        };
+
+        let questions = [
+            {
+                text: "Como você geralmente reage a mudanças inesperadas no trabalho?",
+                options: [
+                    "Adapto-me rapidamente e vejo como uma oportunidade",
+                    "Fico um pouco ansioso, mas consigo lidar",
+                    "Preciso de tempo para processar e me adaptar",
+                    "Tenho dificuldade com mudanças repentinas"
+                ],
+                skill: "adaptabilidade"
+            },
+            {
+                text: "Quando trabalha em equipe, como você lida com conflitos?",
+                options: [
+                    "Busco mediar e encontrar soluções que beneficiem todos",
+                    "Tento manter a harmonia evitando confrontos",
+                    "Defendo meu ponto de vista firmemente",
+                    "Prefiro não me envolver em conflitos"
+                ],
+                skill: "trabalhoEmEquipe"
+            },
+            {
+                text: "Como você lida com prazos apertados?",
+                options: [
+                    "Organizo-me bem e sempre entrego no prazo",
+                    "Fico sob pressão mas consigo entregar",
+                    "Às vezes preciso de ajuda para cumprir prazos",
+                    "Tenho dificuldade com prazos apertados"
+                ],
+                skill: "gestaoTempo"
+            },
+            {
+                text: "Como você se comunica em reuniões importantes?",
+                options: [
+                    "Expresso minhas ideias com clareza e escuto ativamente",
+                    "Participo quando necessário",
+                    "Prefiro ouvir mais do que falar",
+                    "Sinto-me desconfortável em me expressar"
+                ],
+                skill: "comunicacao"
+            },
+            {
+                text: "Como você lida com críticas construtivas?",
+                options: [
+                    "Vejo como oportunidade de crescimento",
+                    "Aceito e tento melhorar",
+                    "Às vezes fico na defensiva",
+                    "Tenho dificuldade em receber críticas"
+                ],
+                skill: "inteligenciaEmocional"
+            }
+        ];
+
+        const questionSets = {
+            businessPartners: [
+                {
+                    text: "Como você gerencia os relacionamentos com diferentes stakeholders dentro da organização?",
+                    options: [
+                        "Estabeleço parcerias estratégicas e comunicação regular",
+                        "Tento resolver conflitos de forma rápida e eficaz",
+                        "Priorizo as necessidades de stakeholders mais influentes",
+                        "Evito envolver-me em situações complexas de relacionamento"
+                    ],
+                    skill: "gestaoRelacionamento"
+                },
+                {
+                    text: "Como você alinha suas ações com os objetivos estratégicos da empresa?",
+                    options: [
+                        "Participo ativamente do planejamento estratégico",
+                        "Adapto minhas atividades às metas gerais",
+                        "Sigo as orientações da liderança",
+                        "Foco principalmente nas demandas operacionais"
+                    ],
+                    skill: "alinhamentoEstrategico"
+                },
+                {
+                    text: "Como você age em situações de conflito entre líderes e suas equipes?",
+                    options: [
+                        "Medio discussões para encontrar uma solução mutuamente aceitável",
+                        "Forneço apoio para a liderança tomar decisões",
+                        "Evito envolver-me diretamente, deixando a equipe lidar",
+                        "Concentro-me em observar o impacto antes de agir"
+                    ],
+                    skill: "resolucaoConflitos"
+                },
+                {
+                    text: "Como você influencia a tomada de decisão nos níveis mais altos da organização?",
+                    options: [
+                        "Apresento dados e análises claras para embasar decisões",
+                        "Estabeleço confiança por meio de comunicação consistente",
+                        "Deixo que as decisões sejam tomadas pela alta liderança",
+                        "Prefiro evitar envolver-me diretamente nas decisões estratégicas"
+                    ],
+                    skill: "influenciaComunicacao"
+                },
+                {
+                    text: "Como você ajuda as equipes a se adaptarem a mudanças organizacionais significativas?",
+                    options: [
+                        "Proporciono treinamentos e comunico os benefícios da mudança",
+                        "Forneço suporte para superar desafios durante a transição",
+                        "Confio que as equipes se adaptem por conta própria",
+                        "Espero que a liderança lidere o processo de adaptação"
+                    ],
+                    skill: "gestaoMudancas"
+                }
+            ],
+            gestores: [
+                {
+                    text: "Como você lida com a resistência da equipe a mudanças organizacionais?",
+                    options: [
+                        "Envolvo a equipe no processo de mudança desde o início",
+                        "Comunico claramente os benefícios da mudança",
+                        "Imponho as mudanças necessárias",
+                        "Evito implementar mudanças significativas"
+                    ],
+                    skill: "lideranca"
+                },
+                {
+                    text: "Como você prioriza metas e objetivos em sua equipe?",
+                    options: [
+                        "Defino prioridades com base nas demandas estratégicas",
+                        "Consulto a equipe para decidir o que é mais urgente",
+                        "Foco em entregar resultados rápidos",
+                        "Tento equilibrar todas as metas ao mesmo tempo"
+                    ],
+                    skill: "gestaoPrioridades"
+                }
+            ],
+            diretores: [
+                {
+                    text: "Como você aborda decisões estratégicas de longo prazo?",
+                    options: [
+                        "Analiso dados e tendências detalhadamente",
+                        "Consulto diferentes stakeholders",
+                        "Baseio-me principalmente na intuição",
+                        "Sigo as diretrizes existentes"
+                    ],
+                    skill: "pensamentoEstrategico"
+                },
+                {
+                    text: "Como você equilibra a necessidade de inovação com a gestão de riscos?",
+                    options: [
+                        "Avalio os riscos detalhadamente antes de inovar",
+                        "Priorizo inovação mesmo com algum risco",
+                        "Mantenho o foco em resultados estáveis",
+                        "Evito mudanças significativas para minimizar riscos"
+                    ],
+                    skill: "gestaoRiscos"
+                }
+            ],
+            analistas: [
+                {
+                    text: "Como você lida com dados conflitantes em suas análises?",
+                    options: [
+                        "Investigo profundamente as causas das discrepâncias",
+                        "Consulto colegas para segunda opinião",
+                        "Uso a média dos dados disponíveis",
+                        "Descarto os dados conflitantes"
+                    ],
+                    skill: "pensamentoAnalitico"
+                },
+                {
+                    text: "Como você apresenta insights técnicos para pessoas não técnicas?",
+                    options: [
+                        "Adapto minha linguagem ao público",
+                        "Foco nos pontos principais, sem detalhes técnicos",
+                        "Uso relatórios detalhados para comunicar insights",
+                        "Evito explicar assuntos técnicos a quem não entende"
+                    ],
+                    skill: "comunicacaoTecnica"
+                }
+            ],
+            assistentes: [
+                {
+                    text: "Como você organiza suas tarefas diárias para garantir eficiência?",
+                    options: [
+                        "Uso listas de tarefas e sigo uma agenda rigorosa",
+                        "Prioritizo tarefas conforme sua urgência",
+                        "Peço orientações para definir prioridades",
+                        "Resolvo as tarefas conforme aparecem"
+                    ],
+                    skill: "organizacao"
+                },
+                {
+                    text: "Como você responde a solicitações inesperadas durante o trabalho?",
+                    options: [
+                        "Adapto rapidamente minha agenda",
+                        "Analiso a urgência e ajusto conforme necessário",
+                        "Peço tempo para reorganizar minhas tarefas",
+                        "Sinto dificuldade em lidar com mudanças inesperadas"
+                    ],
+                    skill: "flexibilidade"
+                }
+            ],
+            auxiliares: [
+                {
+                    text: "Como você garante que as rotinas administrativas sejam realizadas com precisão?",
+                    options: [
+                        "Verifico tudo duas vezes antes de finalizar",
+                        "Sigo processos estabelecidos à risca",
+                        "Peço orientação para tarefas mais complexas",
+                        "Faço o possível para cumprir as demandas"
+                    ],
+                    skill: "atencaoDetalhes"
+                },
+                {
+                    text: "Como você gerencia situações em que precisa de ajuda para concluir suas tarefas?",
+                    options: [
+                        "Peço apoio imediatamente",
+                        "Tento resolver sozinho antes de pedir ajuda",
+                        "Delego partes da tarefa para outras pessoas",
+                        "Adio a conclusão da tarefa até conseguir ajuda"
+                    ],
+                    skill: "proatividade"
+                }
+            ],
+            estagiarios: [
+                {
+                    text: "Como você lida com tarefas novas ou desafiadoras no estágio?",
+                    options: [
+                        "Pesquiso e busco entender antes de começar",
+                        "Peço orientação para garantir que estou no caminho certo",
+                        "Tento resolver sozinho antes de buscar ajuda",
+                        "Sinto dificuldade em lidar com novas tarefas"
+                    ],
+                    skill: "aprendizadoRapido"
+                },
+                {
+                    text: "Como você aproveita as oportunidades de aprendizado no estágio?",
+                    options: [
+                        "Procuro me envolver em todos os projetos disponíveis",
+                        "Participo de treinamentos e workshops oferecidos",
+                        "Foco apenas nas tarefas que me são atribuídas",
+                        "Espero que os gestores me direcionem para o aprendizado"
+                    ],
+                    skill: "iniciativa"
+                }
+            ],
+            outros: [
+                {
+                    text: "Como você lida com demandas que exigem múltiplas habilidades ao mesmo tempo?",
+                    options: [
+                        "Prioritizo o que consigo entregar com mais qualidade",
+                        "Divido o tempo igualmente entre todas as demandas",
+                        "Busco ajuda para tarefas que não domino totalmente",
+                        "Sinto dificuldade em gerenciar demandas variadas"
+                    ],
+                    skill: "multitarefa"
+                },
+                {
+                    text: "Como você se mantém atualizado sobre as melhores práticas do mercado?",
+                    options: [
+                        "Participo de cursos, treinamentos e eventos",
+                        "Leio publicações e notícias do setor regularmente",
+                        "Aprendo conforme as demandas surgem",
+                        "Dependo de feedbacks e orientações para melhorar"
+                    ],
+                    skill: "desenvolvimentoContinuo"
+                }
+            ]
+        };
+
+        function updateRoles() {
+            const categorySelect = document.getElementById('roleCategory');
+            const roleSelect = document.getElementById('specificRole');
+            const selectedCategory = categorySelect.value;
+
+            roleSelect.innerHTML = '<option value="">Selecione um cargo</option>';
+            roleSelect.disabled = !selectedCategory;
+
+            if (selectedCategory) {
+                roleCategories[selectedCategory].forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role;
+                    option.textContent = role;
+                    roleSelect.appendChild(option);
+                });
+            }
+        }
+
+        let currentQuestion = 0; // Índice da pergunta atual (0 baseado)
+        let totalQuestions = 0;  // Total de perguntas, definido dinamicamente
+
+        function startAssessment() {
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const category = document.getElementById('roleCategory').value;
+            const role = document.getElementById('specificRole').value;
+
+            if (!name || !email || !category || !role) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            localStorage.setItem('userInfo', JSON.stringify({
+                name,
+                email,
+                category,
+                role
+            }));
+
+            const originalQuestions = [...questions];
+
+            // Configurar perguntas e total de questões com base na categoria
+            if (category === 'businessPartners') {
+                totalQuestions = 10;
+                questions = [...questionSets[category], ...originalQuestions.slice(0, 5)];
+            } else {
+                totalQuestions = 7;
+                questions = [...questionSets[category], ...originalQuestions.slice(0, 7 - questionSets[category].length)];
+            }
+
+            // Atualizar a interface
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+            document.getElementById('identificationForm').style.display = 'none';
+            document.querySelector('.progress-indicator').style.display = 'block';
+            document.querySelector('.assessment-container:not(#identificationForm)').style.display = 'block';
+
+            // Reiniciar progresso
+            currentQuestion = 0;
+            answers = {};
+
+            // Chamar a função para inicializar as perguntas
+            initializeQuestions();
+            updateProgress();
+        }
+
+
+        function updateProgress() {
+            // Atualizar a barra de progresso
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            document.querySelector('.progress-fill').style.width = `${progress}%`;
+
+            // Atualizar o contador de perguntas
+            document.getElementById('currentQuestionNumber').textContent = currentQuestion + 1;
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+        }
+
+        function initializeQuestions() {
+            const questionnaire = document.getElementById('questionnaire');
+            questionnaire.innerHTML = ''; // Limpa qualquer pergunta existente no container
+
+            // Renderiza cada pergunta como um elemento HTML
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = `question ${index === 0 ? 'active' : ''}`;
+                questionDiv.innerHTML = `
+            <h3>${q.text}</h3>
+            <div class="options">
+                ${q.options.map((opt, i) => `
+                    <div class="option" onclick="selectOption(${index}, ${i})">${opt}</div>
+                `).join('')}
+            </div>
+        `;
+                questionnaire.appendChild(questionDiv);
+            });
+            updateProgress();
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            const options = document.querySelectorAll(`.question:nth-child(${questionIndex + 1}) .option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[optionIndex].classList.add('selected');
+            answers[questions[questionIndex].skill] = 4 - optionIndex;
+            saveProgress();
+        }
+
+        function nextQuestion() {
+            if (!answers[questions[currentQuestion].skill]) {
+                alert('Por favor, selecione uma opção antes de continuar.');
+                return;
+            }
+
+            if (currentQuestion < questions.length - 1) {
+                document.querySelector(`.question:nth-child(${currentQuestion + 1})`).classList.remove('active');
+                currentQuestion++;
+                document.querySelector(`.question:nth-child(${currentQuestion + 1})`).classList.add('active');
+                updateProgress();
+
+                if (currentQuestion === questions.length - 1) {
+                    document.getElementById('nextBtn').textContent = 'Finalizar';
+                }
+            } else {
+                // Ensure all questions are answered before showing results
+                const allQuestionsAnswered = questions.every(q => answers[q.skill]);
+                if (allQuestionsAnswered) {
+                    showResults();
+                } else {
+                    alert('Por favor, responda todas as questões antes de finalizar.');
+                }
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                document.querySelector(`.question:nth-child(${currentQuestion + 1})`).classList.remove('active');
+                currentQuestion--;
+                document.querySelector(`.question:nth-child(${currentQuestion + 1})`).classList.add('active');
+                updateProgress();
+                document.getElementById('nextBtn').textContent = 'Próxima';
+            }
+        }
+
+        function updateProgress() {
+            // Obter as informações do usuário do localStorage
+            const userInfo = JSON.parse(localStorage.getItem('userInfo')) || {};
+            const category = userInfo.category || '';
+
+            // Calcular o total de questões com base na categoria
+            const totalQuestions = category === 'businessPartners' ? 10 : 7;
+
+            // Atualizar a barra de progresso
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            document.querySelector('.progress-fill').style.width = `${progress}%`;
+
+            // Atualizar o contador de perguntas
+            document.getElementById('currentQuestionNumber').textContent = currentQuestion + 1;
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+        }
+
+        function showResults() {
+            const userInfo = JSON.parse(localStorage.getItem('userInfo')) || {};
+            const category = userInfo.category || '';
+
+            document.querySelector('.progress-indicator').style.display = 'none';
+            document.querySelector('.assessment-container:not(#identificationForm)').style.display = 'none';
+
+            const resultsDiv = document.getElementById('results');
+
+            resultsDiv.innerHTML = `
+        <div class="user-info">
+            <p><strong>Nome:</strong> ${userInfo.name || ''}</p>
+            <p><strong>Cargo:</strong> ${userInfo.role || ''}</p>
+        </div>
+        <h2>Relatório de Soft Skills</h2>
+        <div class="chart-container">
+            <h3>Visão Geral das Competências</h3>
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div id="skillBars" class="chart-container">
+            <h3>Detalhamento das Competências</h3>
+        </div>
+        <div class="recommendations">
+            <h3>Recomendações de Desenvolvimento</h3>
+            <div id="recommendationsList"></div>
+        </div>
+        <div class="export-buttons" style="margin-top: 20px; text-align: center;">
+            <button onclick="exportToPDF()">Exportar como PDF</button>
+            <button onclick="window.print()">Imprimir</button>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="location.reload()" 
+                style="background-color: var(--accent-color); color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 1em; cursor: pointer;">
+                Refazer o Teste
+            </button>
+        </div>
+    `;
+
+            resultsDiv.style.display = 'block';
+
+            const radarLabels = category === 'businessPartners'
+                ? ['Gestão de Relacionamento', 'Alinhamento Estratégico', 'Resolução de Conflitos', 'Influência e Comunicação', 'Gestão de Mudanças']
+                : ['Adaptabilidade', 'Trabalho em Equipe', 'Gestão de Tempo', 'Comunicação', 'Inteligência Emocional'];
+
+            const radarData = category === 'businessPartners'
+                ? [
+                    answers.gestaoRelacionamento || 0,
+                    answers.alinhamentoEstrategico || 0,
+                    answers.resolucaoConflitos || 0,
+                    answers.influenciaComunicacao || 0,
+                    answers.gestaoMudancas || 0
+                ]
+                : [
+                    answers.adaptabilidade || 0,
+                    answers.trabalhoEmEquipe || 0,
+                    answers.gestaoTempo || 0,
+                    answers.comunicacao || 0,
+                    answers.inteligenciaEmocional || 0
+                ];
+
+            setTimeout(() => {
+                const radarCtx = document.getElementById('radarChart');
+                if (radarCtx) {
+                    new Chart(radarCtx.getContext('2d'), {
+                        type: 'radar',
+                        data: {
+                            labels: radarLabels,
+                            datasets: [{
+                                label: 'Suas Soft Skills',
+                                data: radarData,
+                                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                                borderColor: 'rgba(52, 152, 219, 1)',
+                                pointBackgroundColor: 'rgba(52, 152, 219, 1)'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            scale: {
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 4
+                                }
+                            }
+                        }
+                    });
+                }
+
+                createSkillBars(category);
+                generateRecommendations(category);
+            }, 100);
+        }
+
+        function createSkillBars(category) {
+            const skillBars = document.getElementById('skillBars');
+            skillBars.innerHTML = '<h3>Detalhamento das Competências</h3>';
+
+            const skills = category === 'businessPartners'
+                ? {
+                    gestaoRelacionamento: 'Gestão de Relacionamento',
+                    alinhamentoEstrategico: 'Alinhamento Estratégico',
+                    resolucaoConflitos: 'Resolução de Conflitos',
+                    influenciaComunicacao: 'Influência e Comunicação',
+                    gestaoMudancas: 'Gestão de Mudanças'
+                }
+                : {
+                    adaptabilidade: 'Adaptabilidade',
+                    trabalhoEmEquipe: 'Trabalho em Equipe',
+                    gestaoTempo: 'Gestão de Tempo',
+                    comunicacao: 'Comunicação',
+                    inteligenciaEmocional: 'Inteligência Emocional'
+                };
+
+            Object.entries(skills).forEach(([key, label]) => {
+                const value = answers[key] || 0;
+                const percentage = (value / 4) * 100;
+
+                const skillBar = document.createElement('div');
+                skillBar.className = 'skill-bar';
+                skillBar.innerHTML = `
+            <div class="skill-name">${label}</div>
+            <div class="progress-bar">
+                <div class="progress" style="width: ${percentage}%" title="${percentage}%"></div>
+            </div>
+            <div class="skill-value" style="text-align: right; font-size: 12px; margin-top: 2px;">
+                ${percentage.toFixed(1)}%
+            </div>
+        `;
+                skillBars.appendChild(skillBar);
+            });
+        }
+
+        function formatSkillName(skill) {
+            const names = {
+                adaptabilidade: 'Adaptabilidade',
+                trabalhoEmEquipe: 'Trabalho em Equipe',
+                gestaoTempo: 'Gestão de Tempo',
+                comunicacao: 'Comunicação',
+                inteligenciaEmocional: 'Inteligência Emocional'
+            };
+            return names[skill] || skill;
+        }
+
+        function generateRecommendations(category) {
+            const recommendationsList = document.getElementById('recommendationsList');
+            recommendationsList.innerHTML = ""; // Limpar recomendações anteriores
+
+            const recommendations = category === 'businessPartners'
+                ? {
+                    gestaoRelacionamento: {
+                        low: "Melhore a gestão de stakeholders por meio de comunicações frequentes e feedback.",
+                        high: "Ótima gestão de relacionamentos! Continue fortalecendo parcerias estratégicas."
+                    },
+                    alinhamentoEstrategico: {
+                        low: "Foque em entender como suas ações contribuem para os objetivos da empresa.",
+                        high: "Excelente alinhamento estratégico! Considere compartilhar suas estratégias com a equipe."
+                    },
+                    resolucaoConflitos: {
+                        low: "Pratique mediação em conflitos menores para desenvolver essa habilidade.",
+                        high: "Ótima habilidade de resolução de conflitos! Continue liderando conversas difíceis com confiança."
+                    },
+                    influenciaComunicacao: {
+                        low: "Participe de treinamentos para desenvolver sua capacidade de influenciar decisões.",
+                        high: "Excelentes habilidades de influência! Continue apoiando a organização na tomada de decisões estratégicas."
+                    },
+                    gestaoMudancas: {
+                        low: "Inicie pequenos projetos de mudança para aumentar sua confiança nesse aspecto.",
+                        high: "Ótima gestão de mudanças! Continue liderando transformações organizacionais com sucesso."
+                    }
+                }
+                : {
+                    adaptabilidade: {
+                        low: "Procure se expor mais a situações novas e desafiadoras. Pratique mindfulness para lidar melhor com mudanças.",
+                        high: "Excelente adaptabilidade! Continue compartilhando suas experiências e ajudando outros a se adaptarem."
+                    },
+                    trabalhoEmEquipe: {
+                        low: "Participe mais ativamente de projetos em grupo. Busque feedback dos colegas regularmente.",
+                        high: "Ótimo trabalho em equipe! Considere mentorar outros membros da equipe."
+                    },
+                    gestaoTempo: {
+                        low: "Experimente técnicas como Pomodoro e listas de prioridades. Estabeleça metas diárias realistas.",
+                        high: "Excelente gestão do tempo! Compartilhe suas técnicas de organização com a equipe."
+                    },
+                    comunicacao: {
+                        low: "Pratique apresentações em pequenos grupos. Faça um curso de oratória ou participe de um clube de debates.",
+                        high: "Ótima comunicação! Continue desenvolvendo suas habilidades de escuta ativa."
+                    },
+                    inteligenciaEmocional: {
+                        low: "Pratique exercícios de autoconhecimento. Busque feedback sobre como suas ações afetam outros.",
+                        high: "Excelente inteligência emocional! Continue desenvolvendo empatia e autoconsciência."
+                    }
+                };
+
+            const skillNames = category === 'businessPartners'
+                ? {
+                    gestaoRelacionamento: 'Gestão de Relacionamento',
+                    alinhamentoEstrategico: 'Alinhamento Estratégico',
+                    resolucaoConflitos: 'Resolução de Conflitos',
+                    influenciaComunicacao: 'Influência e Comunicação',
+                    gestaoMudancas: 'Gestão de Mudanças'
+                }
+                : {
+                    adaptabilidade: 'Adaptabilidade',
+                    trabalhoEmEquipe: 'Trabalho em Equipe',
+                    gestaoTempo: 'Gestão de Tempo',
+                    comunicacao: 'Comunicação',
+                    inteligenciaEmocional: 'Inteligência Emocional'
+                };
+
+            // Gerar recomendações com base nas respostas
+            Object.entries(answers).forEach(([skill, value]) => {
+                const skillRecommendation = recommendations[skill];
+                if (skillRecommendation) {
+                    const recommendation = document.createElement('p');
+                    recommendation.innerHTML = `<strong>${skillNames[skill]}:</strong> ${value >= 3 ? skillRecommendation.high : skillRecommendation.low}`;
+                    recommendationsList.appendChild(recommendation);
+                }
+            });
+        }
+
+
+        function saveProgress() {
+            localStorage.setItem('softSkillsAnswers', JSON.stringify(answers));
+            localStorage.setItem('currentQuestion', currentQuestion);
+        }
+
+        function loadProgress() {
+            const savedAnswers = localStorage.getItem('softSkillsAnswers');
+            const savedQuestion = localStorage.getItem('currentQuestion');
+            totalQuestions = parseInt(localStorage.getItem('totalQuestions')) || 7; // Sempre carregar do localStorage
+
+            if (savedAnswers && savedQuestion) {
+                answers = JSON.parse(savedAnswers);
+                currentQuestion = parseInt(savedQuestion);
+
+                Object.entries(answers).forEach(([skill, value]) => {
+                    const questionIndex = questions.findIndex(q => q.skill === skill);
+                    const optionIndex = 4 - value;
+                    const options = document.querySelectorAll(`.question:nth-child(${questionIndex + 1}) .option`);
+                    options[optionIndex].classList.add('selected');
+                });
+
+                document.querySelectorAll('.question').forEach((q, i) => {
+                    q.classList.remove('active');
+                    if (i === currentQuestion) {
+                        q.classList.add('active');
+                    }
+                });
+
+                updateProgress();
+            }
+        }
+
+        window.addEventListener('load', loadProgress);
+
+        function resetAssessment() {
+            if (confirm('Tem certeza que deseja recomeçar a avaliação? Todo o progresso será perdido.')) {
+                document.querySelector('.progress-indicator').style.display = 'block';
+                document.querySelector('.assessment-container').style.display = 'block';
+
+                localStorage.removeItem('softSkillsAnswers');
+                localStorage.removeItem('currentQuestion');
+                answers = {};
+                currentQuestion = 0;
+                document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                document.querySelectorAll('.question').forEach((q, i) => {
+                    q.classList.remove('active');
+                    if (i === 0) q.classList.add('active');
+                });
+                document.getElementById('results').style.display = 'none';
+                document.getElementById('questionnaire').style.display = 'block';
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('prevBtn').style.display = 'block';
+                document.getElementById('nextBtn').textContent = 'Próxima';
+                updateProgress();
+            }
+        }
+
+        initializeQuestions();
+    </script>
+
+    <footer class="signature">
+        <p>Desenvolvido por <a href="https://www.linkedin.com/in/levilucena/" target="_blank">Levi Lucena</a></p>
+    </footer>
+</body>
+
+</html>
