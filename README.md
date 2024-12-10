@@ -33,6 +33,13 @@ Geração de relatórios em PDF e opção de impressão, facilitando a documenta
 - JavaScript para interatividade dinâmica
 - Chart.js para geração de gráficos interativos
 
+### Backend:
+
+O projeto utiliza Python com Flask como backend para gerenciar funcionalidades essenciais, como:
+
+Servir arquivos estáticos:
+- O Flask é responsável por hospedar o frontend (HTML, CSS e JavaScript), tornando o sistema acessível via navegador.
+
 ### Ferramentas de Exportação:
 
 - jsPDF para geração de relatórios em PDF diretamente no navegador
