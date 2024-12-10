@@ -1,4 +1,4 @@
-# 🚀 Soft Skills Analyzer - Desenvolva Potenciais Humanos 💡
+# 🚀 Soft Skills Analyzer - Potenciais Humanos 💡
 
 ## 📌 Sobre o Projeto
 O Soft Skills Analyzer é uma ferramenta interativa e personalizável que ajuda indivíduos e organizações a avaliar e desenvolver competências comportamentais essenciais para o sucesso pessoal e profissional. Com uma interface intuitiva e análises detalhadas, ele oferece insights sobre as principais habilidades interpessoais, inteligência emocional e trabalho em equipe.
