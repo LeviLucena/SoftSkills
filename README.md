@@ -3,7 +3,8 @@
 ## 📌 Sobre o Projeto
 O Soft Skills Analyzer é uma ferramenta interativa e personalizável que ajuda indivíduos e organizações a avaliar e desenvolver competências comportamentais essenciais para o sucesso pessoal e profissional. Com uma interface intuitiva e análises detalhadas, ele oferece insights sobre as principais habilidades interpessoais, inteligência emocional e trabalho em equipe.
 
-![image](https://github.com/user-attachments/assets/26ba1c00-07d3-4fd0-9897-3992ae5e4a2e)
+| ![image1](https://github.com/user-attachments/assets/26ba1c00-07d3-4fd0-9897-3992ae5e4a2e) | ![image2](https://github.com/user-attachments/assets/514dba59-20f6-4b07-bfdc-dceebf9b88b9) | ![image3](https://github.com/user-attachments/assets/c4c2ab91-f582-4afb-ad56-5c4859d0ca29) |
+|---|---|---|
 
 ## 🎯 Funcionalidades Principais
 Identificação Personalizada
