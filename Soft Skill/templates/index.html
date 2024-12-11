@@ -1004,6 +1004,7 @@
             const options = document.querySelectorAll(`.question:nth-child(${questionIndex + 1}) .option`);
             options.forEach(opt => opt.classList.remove('selected'));
             options[optionIndex].classList.add('selected');
+            // Atualizando a resposta com base no índice da pergunta
             answers[questions[questionIndex].skill] = 4 - optionIndex;
             saveProgress();
         }
@@ -1107,18 +1108,18 @@
 
             const radarData = category === 'businessPartners'
                 ? [
-                    answers.gestaoRelacionamento || 0,
-                    answers.alinhamentoEstrategico || 0,
-                    answers.resolucaoConflitos || 0,
-                    answers.influenciaComunicacao || 0,
-                    answers.gestaoMudancas || 0
+                    (answers.gestaoRelacionamento / 4) * 100 || 0,
+                    (answers.alinhamentoEstrategico / 4) * 100 || 0,
+                    (answers.resolucaoConflitos / 4) * 100 || 0,
+                    (answers.influenciaComunicacao / 4) * 100 || 0,
+                    (answers.gestaoMudancas / 4) * 100 || 0
                 ]
                 : [
-                    answers.adaptabilidade || 0,
-                    answers.trabalhoEmEquipe || 0,
-                    answers.gestaoTempo || 0,
-                    answers.comunicacao || 0,
-                    answers.inteligenciaEmocional || 0
+                    (answers.adaptabilidade / 4) * 100 || 0,
+                    (answers.trabalhoEmEquipe / 4) * 100 || 0,
+                    (answers.gestaoTempo / 4) * 100 || 0,
+                    (answers.comunicacao / 4) * 100 || 0,
+                    (answers.inteligenciaEmocional / 4) * 100 || 0
                 ];
 
             setTimeout(() => {
@@ -1139,10 +1140,13 @@
                         options: {
                             responsive: true,
                             maintainAspectRatio: true,
-                            scale: {
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 4
+                            scales: {
+                                r: {
+                                    min: 0,
+                                    max: 100,
+                                    ticks: {
+                                        stepSize: 20 // Incrementos de 20% no gráfico
+                                    }
                                 }
                             }
                         }
